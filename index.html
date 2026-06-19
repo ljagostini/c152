@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SOP C-152">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0e1a' width='100' height='100' rx='20'/><text y='65' x='50' text-anchor='middle' font-size='50'>✈️</text></svg>">
+<title>SOP – Cessna 152</title>
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --card: #1a2236;
+  --border: #1e2d45;
+  --accent: #2563eb;
+  --green: #16a34a;
+  --red: #dc2626;
+  --orange: #ea580c;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --cyan: #22d3ee;
+  --lime: #4ade80;
+  --amber: #fbbf24;
+  --purple: #c084fc;
+  --blue: #60a5fa;
+  --orang: #fb923c;
+  --radius: 14px;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
+/* ═══════════════════════════════════════
+   HOME SCREEN
+   ═══════════════════════════════════════ */
+#home-screen {
+  padding: calc(var(--sat) + 16px) 12px calc(var(--sab) + 16px);
+  min-height: 100dvh;
+}
+.home-hdr { text-align: center; padding: 16px 0 20px; }
+.home-hdr .icon { font-size: 44px; }
+.home-hdr h1 { font-size: 22px; font-weight: 800; margin-top: 6px; }
+.home-hdr p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+.home-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--text3); text-transform: uppercase; padding: 10px 4px 6px;
+}
+.home-list { display: flex; flex-direction: column; gap: 8px; }
+.home-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+  cursor: pointer; -webkit-user-select: none; user-select: none;
+}
+.home-card:active { background: #1f2f47; }
+.hc-icon {
+  width: 42px; height: 42px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.home-card .hc-info { flex: 1; min-width: 0; }
+.home-card .hc-info h3 { font-size: 15px; font-weight: 700; }
+.home-card .hc-info p { font-size: 12px; color: var(--text2); margin-top: 1px; }
+.home-card .hc-chev { color: var(--text3); font-size: 16px; }
+.emg-badge {
+  display: inline-block; background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 20px;
+  letter-spacing: 0.06em; vertical-align: middle; margin-left: 4px;
+}
+.hc-emg { border-color: rgba(220,38,38,0.3); }
+
+/* ═══════════════════════════════════════
+   FLIGHT MODE — HUD
+   ═══════════════════════════════════════ */
+#flight-screen {
+  display: none;
+  height: 100dvh;
+  background: var(--bg);
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─ Top Bar ─ */
+.fl-topbar {
+  flex-shrink: 0;
+  padding: calc(var(--sat) + 6px) 12px 6px;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(10,14,26,0.95);
+  border-bottom: 1px solid var(--border);
+  z-index: 10;
+}
+.fl-badge {
+  padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800;
+  cursor: pointer; letter-spacing: 0.04em;
+}
+.fl-title { flex: 1; text-align: center; }
+.fl-title span { font-size: 15px; font-weight: 700; }
+.fl-title small { display: block; font-size: 11px; color: var(--text3); }
+.fl-sos {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--red); border: none; color: #fff;
+  font-size: 13px; font-weight: 900; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  letter-spacing: 0.05em; flex-shrink: 0;
+}
+.fl-sos:active { background: #b91c1c; }
+
+/* ─ Param Dashboard ─ */
+.fl-params {
+  flex-shrink: 0;
+  display: grid; gap: 6px;
+  padding: 8px 10px 4px;
+}
+.fl-params.cols-1 { grid-template-columns: 1fr; }
+.fl-params.cols-2 { grid-template-columns: 1fr 1fr; }
+.fl-params.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.fl-params:empty { display: none; padding: 0; }
+
+.param-tile {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 6px 10px 6px 14px; position: relative; overflow: hidden;
+}
+.param-tile::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+}
+.pt-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.45; line-height: 1; }
+.pt-row { display: flex; align-items: baseline; gap: 4px; margin-top: 1px; }
+.pt-value { font-size: 28px; font-weight: 800; line-height: 1; }
+.pt-unit { font-size: 13px; font-weight: 700; opacity: 0.6; }
+.fl-params.cols-3 .pt-value { font-size: 24px; }
+.fl-params.cols-3 .pt-unit { font-size: 12px; }
+.fl-params.compact .param-tile { padding: 5px 8px 5px 12px; }
+.fl-params.compact .pt-value { font-size: 20px; }
+.fl-params.compact .pt-unit { font-size: 11px; }
+.fl-params.compact .pt-label { font-size: 8px; }
+
+.clr-rpm { color: var(--cyan); }
+.clr-rpm .param-tile::before, .param-tile.clr-rpm::before { background: var(--cyan); }
+.param-tile.clr-rpm { border-color: rgba(34,211,238,0.2); }
+
+.clr-kts { color: var(--lime); }
+.param-tile.clr-kts::before { background: var(--lime); }
+.param-tile.clr-kts { border-color: rgba(74,222,128,0.2); }
+
+.clr-psi { color: var(--amber); }
+.param-tile.clr-psi::before { background: var(--amber); }
+.param-tile.clr-psi { border-color: rgba(251,191,36,0.2); }
+
+.clr-flap { color: var(--purple); }
+.param-tile.clr-flap::before { background: var(--purple); }
+.param-tile.clr-flap { border-color: rgba(192,132,252,0.2); }
+
+.clr-ft { color: var(--blue); }
+.param-tile.clr-ft::before { background: var(--blue); }
+.param-tile.clr-ft { border-color: rgba(96,165,250,0.2); }
+
+.clr-temp { color: var(--orang); }
+.param-tile.clr-temp::before { background: var(--orang); }
+.param-tile.clr-temp { border-color: rgba(251,146,60,0.2); }
+
+/* ─ Step Card ─ */
+.fl-step {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 12px;
+}
+.fl-step-title {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.fl-step-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; flex-shrink: 0;
+}
+.fl-step-title h2 { font-size: 18px; font-weight: 800; flex: 1; }
+.fl-step-title .fl-sub { font-size: 12px; color: var(--text2); display: block; font-weight: 400; }
+
+.fl-items { display: flex; flex-direction: column; gap: 2px; }
+.fl-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; min-height: 42px;
+  background: rgba(255,255,255,0.03); border-radius: 8px;
+  border: 1px solid transparent; cursor: pointer;
+  -webkit-user-select: none; user-select: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.fl-item:active { background: rgba(255,255,255,0.06); }
+.fl-item.checked {
+  background: rgba(22,163,74,0.1); border-color: rgba(22,163,74,0.25);
+}
+.fi-box {
+  width: 26px; height: 26px; border: 2px solid var(--border); border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 14px; color: transparent;
+  transition: all 0.15s;
+}
+.fl-item.checked .fi-box {
+  background: var(--green); border-color: var(--green); color: #fff;
+}
+.fi-text { flex: 1; font-size: 15px; line-height: 1.35; }
+.fi-val { font-weight: 700; color: var(--accent); font-size: 14px; white-space: nowrap; margin-left: 4px; }
+
+.fl-note {
+  margin-top: 8px; padding: 10px 12px;
+  background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2);
+  border-radius: 10px; font-size: 13px; color: var(--text2); line-height: 1.4;
+}
+.fl-warn {
+  margin-top: 8px; padding: 10px 12px;
+  background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.25);
+  border-radius: 10px; font-size: 13px; color: #fca5a5; line-height: 1.4;
+}
+
+/* ─ Next Step Preview ─ */
+.fl-next {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  background: rgba(255,255,255,0.02);
+}
+.fl-next:active { background: rgba(255,255,255,0.05); }
+.fl-next-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); }
+.fl-next-title { font-size: 15px; font-weight: 700; margin-top: 2px; }
+.fl-next-params { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.fl-next.no-next { cursor: default; text-align: center; }
+
+/* ─ Nav Bar ─ */
+.fl-nav {
+  flex-shrink: 0;
+  display: flex; align-items: center;
+  padding: 6px 12px calc(var(--sab) + 6px);
+  border-top: 1px solid var(--border);
+  background: rgba(10,14,26,0.95);
+}
+.fl-nav-btn {
+  width: 52px; height: 44px; display: flex; align-items: center; justify-content: center;
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  color: var(--text2); font-size: 18px; cursor: pointer;
+}
+.fl-nav-btn:active { background: #1f2f47; }
+.fl-nav-btn.disabled { opacity: 0.2; pointer-events: none; }
+.fl-dots { flex: 1; display: flex; justify-content: center; gap: 6px; align-items: center; flex-wrap: wrap; }
+.fl-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border); transition: background 0.2s, transform 0.2s;
+}
+.fl-dot.active { background: var(--accent); transform: scale(1.3); }
+.fl-dot.done { background: var(--green); }
+.fl-home-btn {
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  background: none; border: none; color: var(--text3); font-size: 20px; cursor: pointer;
+}
+
+/* ═══════════════════════════════════════
+   GROUND MODE — LIST (preflight, exercises, reference)
+   ═══════════════════════════════════════ */
+#ground-screen {
+  display: none;
+  height: 100dvh;
+  background: var(--bg);
+  flex-direction: column;
+  overflow: hidden;
+}
+.gnd-topbar {
+  flex-shrink: 0;
+  padding: calc(var(--sat) + 8px) 12px 8px;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(10,14,26,0.95);
+  border-bottom: 1px solid var(--border);
+}
+.gnd-back {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--card);
+  border: none; color: var(--accent); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.gnd-title { flex: 1; }
+.gnd-title h1 { font-size: 17px; font-weight: 700; }
+.gnd-title p { font-size: 11px; color: var(--text3); }
+.gnd-progress { height: 3px; background: var(--border); flex-shrink: 0; }
+.gnd-progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+
+.gnd-content {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 10px 12px calc(var(--sab) + 12px);
+}
+
+.gnd-step {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 8px; overflow: hidden; cursor: pointer; -webkit-user-select: none;
+}
+.gnd-step.active { border-color: var(--accent); }
+.gnd-step.done { border-color: var(--green); opacity: 0.6; }
+.gnd-step-hdr {
+  display: flex; align-items: center; gap: 10px; padding: 14px 14px;
+}
+.gnd-snum {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: var(--text2); flex-shrink: 0;
+}
+.gnd-step.active .gnd-snum { background: var(--accent); color: #fff; }
+.gnd-step.done .gnd-snum { background: var(--green); color: #fff; }
+.gnd-step-hdr h3 { flex: 1; font-size: 15px; font-weight: 700; }
+.gnd-step-hdr .cnt { font-size: 11px; color: var(--text3); }
+.gnd-step-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
+.gnd-step.active .gnd-step-body { display: block; }
+
+.gnd-items { list-style: none; margin-top: 8px; display: flex; flex-direction: column; gap: 5px; }
+.gnd-items li {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; min-height: 44px;
+  background: rgba(255,255,255,0.03); border-radius: 10px;
+  border: 1px solid transparent; cursor: pointer;
+}
+.gnd-items li:active { background: rgba(255,255,255,0.06); }
+.gnd-items li.checked { background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.2); }
+.gi-box {
+  width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 13px; color: transparent;
+}
+.gnd-items li.checked .gi-box { background: var(--green); border-color: var(--green); color: #fff; }
+.gi-text { flex: 1; font-size: 14px; }
+.gi-val { font-weight: 700; color: var(--accent); font-size: 13px; white-space: nowrap; }
+
+.gnd-note {
+  margin-top: 8px; padding: 8px 10px;
+  background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2);
+  border-radius: 8px; font-size: 12px; color: var(--text2); line-height: 1.4;
+}
+.gnd-warn {
+  margin-top: 8px; padding: 8px 10px;
+  background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.25);
+  border-radius: 8px; font-size: 12px; color: #fca5a5; line-height: 1.4;
+}
+.gnd-reset {
+  display: block; margin: 6px auto 0;
+  background: none; border: 1px solid var(--border); color: var(--text3);
+  border-radius: 8px; padding: 6px 12px; font-size: 11px; cursor: pointer;
+}
+
+/* Ref tables */
+.ref-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+.ref-table td { padding: 7px 4px; border-bottom: 1px solid var(--border); }
+.ref-table td:first-child { color: var(--text2); }
+.ref-table td:last-child { font-weight: 700; text-align: right; }
+
+/* ═══════════════════════════════════════
+   BOTTOM SHEET (phase selector)
+   ═══════════════════════════════════════ */
+#sheet-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.6);
+}
+#sheet {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--surface); border-radius: 20px 20px 0 0;
+  padding: 12px 12px calc(var(--sab) + 12px);
+  transform: translateY(100%); transition: transform 0.3s ease;
+  max-height: 85dvh; overflow-y: auto;
+}
+#sheet-overlay.open #sheet { transform: translateY(0); }
+.sheet-handle {
+  width: 36px; height: 4px; background: var(--text3); border-radius: 2px;
+  margin: 0 auto 12px;
+}
+.sheet-title { font-size: 13px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 4px 8px; }
+.sheet-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 12px; border-radius: 12px; cursor: pointer;
+  margin-bottom: 4px;
+}
+.sheet-item:active { background: var(--card); }
+.sheet-item.current { background: var(--card); border: 1px solid var(--accent); }
+.si-icon { font-size: 20px; width: 36px; text-align: center; }
+.si-info { flex: 1; }
+.si-info h3 { font-size: 15px; font-weight: 700; }
+.si-info p { font-size: 11px; color: var(--text2); }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ HOME ═══ -->
+<div id="home-screen">
+  <div class="home-hdr">
+    <h1>Cessna 152</h1>
+    <p>SOP – REV 1.3</p>
+  </div>
+
+  <div class="home-label">Fases do Voo</div>
+  <div class="home-list">
+    <div class="home-card" onclick="go('preflight')">
+      <div class="hc-icon" style="background:rgba(37,99,235,0.15)">📋</div>
+      <div class="hc-info"><h3>Pré-Voo & Solo</h3><p>Inspeção, acionamento, táxi, cheques</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+    <div class="home-card" onclick="go('decolagem')">
+      <div class="hc-icon" style="background:rgba(22,163,74,0.15)">🛫</div>
+      <div class="hc-info"><h3>Decolagem</h3><p>Normal, curta, perna do vento</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+    <div class="home-card" onclick="go('cruzeiro')">
+      <div class="hc-icon" style="background:rgba(56,189,248,0.15)">✈️</div>
+      <div class="hc-info"><h3>Cruzeiro</h3><p>Subida, navegação, voo local, descida</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+    <div class="home-card" onclick="go('circuito')">
+      <div class="hc-icon" style="background:rgba(168,85,247,0.15)">🛬</div>
+      <div class="hc-info"><h3>Circuito & Pouso</h3><p>Perna do vento, base, final, pouso</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+    <div class="home-card" onclick="go('goaround')">
+      <div class="hc-icon" style="background:rgba(234,88,12,0.15)">⚠️</div>
+      <div class="hc-info"><h3>Voo Planado & Arremetidas</h3><p>Planado, arremetida final e no solo</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+    <div class="home-card" onclick="go('apospouso')">
+      <div class="hc-icon" style="background:rgba(100,116,139,0.15)">🏁</div>
+      <div class="hc-info"><h3>Após Pouso & Corte</h3><p>After landing, shutdown, abandono</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+    <div class="home-card" onclick="go('exercises')">
+      <div class="hc-icon" style="background:rgba(202,138,4,0.15)">🔄</div>
+      <div class="hc-info"><h3>Exercícios Práticos</h3><p>Estol cruzeiro e configuração pouso</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+    <div class="home-card hc-emg" onclick="go('emergency')">
+      <div class="hc-icon" style="background:rgba(220,38,38,0.15)">🚨</div>
+      <div class="hc-info"><h3>Emergências <span class="emg-badge">MEM</span></h3><p>Pane, fogo, pouso sem potência</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+    <div class="home-card" onclick="go('reference')">
+      <div class="hc-icon" style="background:rgba(100,116,139,0.15)">📊</div>
+      <div class="hc-info"><h3>Dados de Referência</h3><p>Velocidades, pesos, mínimos</p></div>
+      <span class="hc-chev">›</span>
+    </div>
+  </div>
+  <div style="height:20px"></div>
+</div>
+
+<!-- ═══ FLIGHT MODE ═══ -->
+<div id="flight-screen">
+  <div class="fl-topbar">
+    <span class="fl-badge" id="fl-badge" onclick="openSheet()"></span>
+    <div class="fl-title">
+      <span id="fl-step-label"></span>
+      <small id="fl-counter"></small>
+    </div>
+    <button class="fl-sos" onclick="go('emergency')">SOS</button>
+  </div>
+
+  <div class="fl-params" id="fl-params"></div>
+
+  <div class="fl-step" id="fl-step"></div>
+
+  <div class="fl-next" id="fl-next" onclick="nextStep()"></div>
+
+  <div class="fl-nav">
+    <button class="fl-nav-btn" id="fl-prev-btn" onclick="prevStep()">‹</button>
+    <div class="fl-dots" id="fl-dots"></div>
+    <button class="fl-home-btn" onclick="goHome()">⌂</button>
+    <button class="fl-nav-btn" id="fl-next-btn" onclick="nextStep()">›</button>
+  </div>
+</div>
+
+<!-- ═══ GROUND MODE ═══ -->
+<div id="ground-screen">
+  <div class="gnd-topbar">
+    <button class="gnd-back" onclick="goHome()">‹</button>
+    <div class="gnd-title">
+      <h1 id="gnd-title"></h1>
+      <p id="gnd-sub"></p>
+    </div>
+  </div>
+  <div class="gnd-progress"><div class="gnd-progress-fill" id="gnd-prog"></div></div>
+  <div class="gnd-content" id="gnd-content"></div>
+</div>
+
+<!-- ═══ BOTTOM SHEET ═══ -->
+<div id="sheet-overlay" onclick="closeSheet()">
+  <div id="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Selecionar Fase</div>
+    <div id="sheet-list"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+const PHASE_META = {
+  preflight:  { title:'Pré-Voo & Solo', icon:'📋', color:'#2563eb', badge:'SOLO', mode:'ground' },
+  decolagem:  { title:'Decolagem', icon:'🛫', color:'#16a34a', badge:'DEC', mode:'flight' },
+  cruzeiro:   { title:'Cruzeiro', icon:'✈️', color:'#0ea5e9', badge:'CRZ', mode:'flight' },
+  circuito:   { title:'Circuito & Pouso', icon:'🛬', color:'#a855f7', badge:'PSO', mode:'flight' },
+  goaround:   { title:'Planado & Arremetida', icon:'⚠️', color:'#ea580c', badge:'ARR', mode:'flight' },
+  apospouso:  { title:'Após Pouso & Corte', icon:'🏁', color:'#64748b', badge:'FIM', mode:'flight' },
+  exercises:  { title:'Exercícios Práticos', icon:'🔄', color:'#ca8a04', badge:'EXE', mode:'ground' },
+  emergency:  { title:'Emergências', icon:'🚨', color:'#dc2626', badge:'EMG', mode:'flight' },
+  reference:  { title:'Dados de Referência', icon:'📊', color:'#64748b', badge:'REF', mode:'ground' },
+};
+
+const PHASES = {
+
+preflight: [
+  { title:'Inspeção da Aeronave', sub:'Externa e interna – 20–30 min antes',
+    items:[
+      {t:'Verificar livros de bordo na cabine',v:''},
+      {t:'Executar PRE-FLIGHT INSPECTION CHECKLIST',v:''},
+      {t:'Verificar abastecimento mínimo',v:'13 US Gal (voo local)'},
+      {t:'Tanque cheio para navegação',v:'26 US Gal'},
+      {t:'Verificar condições do aeródromo',v:''},
+    ],
+    note:'A inspeção externa segue a ordem do Pilot\'s Operating Handbook.'
+  },
+  { title:'Peso & Balanceamento', sub:'Antes de cada voo',
+    items:[
+      {t:'Manifesto de peso e balanceamento',v:'Completado'},
+      {t:'Mensagens meteorológicas',v:'Verificadas'},
+      {t:'Para navegação: NOTAM, ROTAER',v:''},
+      {t:'Plano de voo e planejamento',v:'(navegação)'},
+    ]
+  },
+  { title:'Briefing Pré-Voo', sub:'Instrutor coordena atividades na cabine',
+    items:[
+      {t:'Aluno apresenta manifesto',v:''},{t:'Meteorologia revisada',v:''},{t:'Responsabilidades definidas',v:''},
+    ],
+    note:'Checklists de BEFORE TAKEOFF até AFTER LANDING são cantados e executados pelo Aluno.'
+  },
+  { title:'Acionamento – Partida Fria', sub:'Executar Before Start Checklist',
+    items:[
+      {t:'Cleared for Start Checklist',v:'EXECUTADO'},{t:'Mixture',v:'RICA'},{t:'Throttle',v:'3 INJETADAS'},
+      {t:'Throttle',v:'½ POLEGADA'},{t:'Starter (sem injetar combustível)',v:'ACIONAR'},
+      {t:'Após partida – RPM',v:'1000 RPM'},{t:'After Start Checklist',v:'EXECUTADO'},
+    ]
+  },
+  { title:'Acionamento – Partida Quente', sub:'Motor ainda aquecido',
+    items:[
+      {t:'Cleared for Start Checklist',v:'EXECUTADO'},{t:'Mixture',v:'RICA'},{t:'Throttle',v:'1 INJETADA'},
+      {t:'Throttle',v:'½ POLEGADA'},{t:'Starter (sem injetar combustível)',v:'ACIONAR'},
+      {t:'Após partida – RPM',v:'1000 RPM'},{t:'After Start Checklist',v:'EXECUTADO'},
+    ]
+  },
+  { title:'Acionamento – Partida Afogada', sub:'Após tentativas frustradas',
+    items:[
+      {t:'Cleared for Start Checklist',v:'EXECUTADO'},{t:'Mixture',v:'CUT OFF'},{t:'Throttle',v:'FULL OPEN'},
+      {t:'Starter (sem injetar combustível)',v:'ACIONAR'},{t:'Mixture',v:'FULL RICH'},
+      {t:'Após partida – RPM',v:'1000 RPM'},{t:'After Start Checklist',v:'EXECUTADO'},
+    ]
+  },
+  { title:'Táxi', sub:'Cheques antes de mover',
+    items:[
+      {t:'Calços',v:'REMOVIDOS'},{t:'Área das asas e hélice',v:'LIVRE'},
+      {t:'Pista em uso – cabeceira definida',v:''},{t:'Landing Lights',v:'ON (fora de Eldorado)'},
+      {t:'Before Takeoff Checklist Down to the Line',v:'DURANTE TÁXI'},
+    ]
+  },
+  { title:'Cheque de Motor', sub:'Ajustar 1800 RPM',
+    items:[
+      {t:'Potência Máxima mínima',v:'≥ 2280 RPM'},{t:'Magnetos – queda máxima',v:'175 RPM'},
+      {t:'Magnetos – diferença máxima',v:'50 RPM'},{t:'Carburetor Heat – queda máxima',v:'200 RPM'},
+      {t:'Rotação em lenta',v:'650–850 RPM'},
+    ],
+    warn:'Não operar com apenas 1 magneto por mais de 3 segundos.'
+  },
+  { title:'Take-off Briefing', sub:'Falado pelo aluno no ponto de espera',
+    items:[
+      {t:'Tipo de decolagem e cabeceira',v:''},{t:'Flaps',v:'10°'},{t:'Velocidade de rotação',v:'60 kts'},
+      {t:'Aceleração até',v:'65 kts / 400 ft'},{t:'After Takeoff Checklist',v:'400 ft AGL'},
+      {t:'Aceleração para',v:'70 kts'},{t:'Curva a 500 ft e fim de pista',v:''},{t:'Altitude de circuito',v:'1033 ft'},
+    ],
+    note:'Briefing Emerg: pane < 500ft → pousar em frente; pane > 500ft → pousar em frente ou retornar com curvas para o vento.'
+  },
+  { title:'Ponto de Espera', sub:'Security Check',
+    items:[
+      {t:'Landing Lights (se necessário)',v:'OFF'},{t:'Before TakeOff Below the Line',v:'EXECUTADO'},
+      {t:'Cleared for Take-off Checklist',v:'EXECUTADO'},
+      {t:'1 – Flape esq. na posição',v:''},{t:'2 – Porta/janela esq. fechadas',v:''},
+      {t:'3 – Magnetos ON / Control Lock removido',v:''},{t:'4 – Compensador Takeoff',v:''},
+      {t:'5 – Rádios/Transponder',v:'ALT'},{t:'6 – Mistura',v:'RICA'},
+      {t:'7 – Seletora',v:'AMBOS'},{t:'8 – Porta/janela dir. fechadas',v:''},
+      {t:'9 – Flape dir. na posição',v:''},{t:'10 – Cintos',v:'AFIVELADOS'},{t:'11 – Cheque de área',v:''},
+    ]
+  },
+],
+
+decolagem: [
+  { title:'Decolagem Normal', sub:'Flape 10°',
+    items:[
+      {t:'Potência máxima completa',v:''},{t:'RPM mínima estabilizada',v:'≥ 2280 RPM'},
+      {t:'Pressão de óleo mínima',v:'≥ 60 PSI'},{t:'Temperatura de óleo mínima',v:'≥ 100° F'},
+      {t:'Na VR – cantar ROTATION e rodar',v:'60 kts'},{t:'Iniciar subida',v:'65 kts'},
+      {t:'After Take-Off Checklist',v:'400 ft AGL'},{t:'Acelerar para',v:'70 kts'},
+      {t:'Cheque de área',v:''},{t:'Curva para vento ou instrução ATC',v:'500 ft + fim pista'},
+    ]
+  },
+  { title:'Decolagem Curta', sub:'Flape 10° – freios aplicados',
+    items:[
+      {t:'Freios aplicados',v:''},{t:'Potência máxima completa',v:''},
+      {t:'RPM mínima',v:'≥ 2280 RPM'},{t:'Pressão de óleo mínima',v:'≥ 60 PSI'},
+      {t:'Temperatura de óleo mínima',v:'≥ 100° F'},{t:'Soltar freios',v:''},
+      {t:'Na VR – cantar ROTATION',v:'55 kts'},{t:'Acelerar após livrar obstáculos',v:'60 kts'},
+      {t:'Flape',v:'UP'},{t:'After Take-Off Checklist',v:'400 ft AGL'},{t:'Acelerar para',v:'70 kts'},
+    ]
+  },
+  { title:'Circuito – Perna do Vento', sub:'Após decolagem',
+    items:[
+      {t:'Potência',v:'2100 RPM'},{t:'Velocidade',v:'80 kts'},
+    ]
+  },
+],
+
+cruzeiro: [
+  { title:'Subida em Cruzeiro', sub:'Para navegação',
+    items:[
+      {t:'Potência máxima',v:'FULL'},{t:'Velocidade',v:'70 kts'},
+      {t:'QNH → QNE (2000 ft acima terreno ou transição)',v:''},{t:'Ajuste de mistura (se acima 3000 ft)',v:'NECESSÁRIO'},
+    ]
+  },
+  { title:'Cruzeiro – Navegação', sub:'',
+    items:[{t:'Potência',v:'2200 RPM'},{t:'Mistura: reduzir até queda, depois avançar',v:'1 polegada'}],
+    note:'Manete de mistura: apertar botão central para destravar. Ajuste fino: girar parte vermelha (dir=enriquecer, esq=empobrecer).'
+  },
+  { title:'Cruzeiro – Voo Local', sub:'',
+    items:[{t:'Potência',v:'2100 RPM'},{t:'Velocidade aprox.',v:'80 kts'}]
+  },
+  { title:'Descida', sub:'',
+    items:[
+      {t:'Potência',v:'1500 RPM'},{t:'Velocidade',v:'80 kts'},{t:'Razão de descida',v:'500 ft/min'},
+      {t:'Descent/Approach Checklist ao ajustar altímetro',v:''},{t:'Enriquecer mistura ao iniciar descida',v:'3 voltas'},
+      {t:'Enriquecer gradativamente',v:'2–3 voltas/1000 ft'},
+    ],
+    note:'Altímetro ajustado quando ATC passa QNH ou ao cruzar nível de transição.'
+  },
+],
+
+circuito: [
+  { title:'Perna do Vento', sub:'Para pouso',
+    items:[{t:'Potência',v:'2100 RPM'},{t:'Velocidade',v:'80 kts'},{t:'Metade da pista → Landing Checklist',v:''}]
+  },
+  { title:'Través da Cabeceira', sub:'',
+    items:[{t:'Potência',v:'1300 RPM'},{t:'Flape',v:'10°'},{t:'Velocidade de aproximação',v:'65 kts'}]
+  },
+  { title:'Base', sub:'',
+    items:[{t:'Flape (se aplicar)',v:'10° ou 20°'},{t:'Velocidade de aproximação',v:'65 kts'}]
+  },
+  { title:'Final', sub:'',
+    items:[{t:'Flape (se aplicar)',v:'30°'},{t:'Velocidade de aproximação',v:'60 kts'}]
+  },
+  { title:'Pouso Normal', sub:'',
+    items:[{t:'Cruzar cabeceira: −5 kts da aprox. e 50 ft acima TDZE',v:''}],
+    note:'Sem flape: toda aproximação a 70 kts, reduzir 1300 RPM no través da cabeceira.'
+  },
+  { title:'Pouso Curto', sub:'Perna do vento → final',
+    items:[
+      {t:'Perna do vento',v:'2100 RPM'},{t:'Metade pista → Landing Checklist',v:''},
+      {t:'Través cabeceira',v:'1300 RPM / 10° / 65 kts'},{t:'Base',v:'20° / 60 kts'},
+      {t:'Final',v:'30° / 55 kts'},{t:'Cruzar cabeceira potência reduzida',v:'55 kts'},
+      {t:'Após toque – manche cabrado',v:''},{t:'Triquilha no solo – freios',v:'CONFORME NECESSÁRIO'},
+      {t:'Flapes',v:'UP'},
+    ],
+    note:'AD >1500 ft ou vento moderado/forte: +5 kts. Vento forte: flape 10°.'
+  },
+],
+
+goaround: [
+  { title:'Voo Planado', sub:'',
+    items:[
+      {t:'Carburetor Heat (se necessário)',v:'OPEN'},{t:'Throttle',v:'IDLE'},
+      {t:'Velocidade – Flaps UP',v:'65 kts'},{t:'Velocidade – Flaps DOWN',v:'60 kts'},
+      {t:'Rajada a cada 300 ft',v:'500 RPM'},
+    ]
+  },
+  { title:'Arremetida na Final', sub:'',
+    items:[
+      {t:'Aplique toda a potência',v:''},{t:'Fechar ar quente do carburador (se aberto)',v:''},
+      {t:'Cabrar suavemente o avião',v:''},{t:'Razão de subida positiva → recolher flape',v:''},
+      {t:'Acelerar para velocidade de subida',v:''},
+    ]
+  },
+  { title:'Arremetida no Solo', sub:'Conferir antes de iniciar',
+    items:[
+      {t:'Flape',v:'UP ou 10°'},{t:'Mixture',v:'FULL RICH'},
+      {t:'Carburetor Heat',v:'CLOSED'},{t:'Trim',v:'T/O POSITION'},
+    ]
+  },
+],
+
+apospouso: [
+  { title:'Após Pouso', sub:'Ao livrar o eixo da pista',
+    items:[{t:'After Landing Checklist',v:'EXECUTADO'}]
+  },
+  { title:'Corte (Shutdown)', sub:'',
+    items:[{t:'Shutdown Checklist',v:'EXECUTADO'},{t:'Securing Aircraft Checklist',v:'EXECUTADO'}]
+  },
+],
+
+exercises: [
+  { title:'Estol – Config. Cruzeiro', sub:'Flape UP – mín. 2500 ft AGL',
+    items:[
+      {t:'Altura mínima',v:'2500 ft AGL'},{t:'Estabelecer referência visual',v:''},
+      {t:'Cheque de área (2×90° ou 1×180°)',v:''},{t:'Flape',v:'UP'},
+      {t:'Reduzir motor',v:'1300 RPM'},{t:'Cabrar suavemente (climb zerado)',v:''},
+      {t:'No pré-estol: soltar manche + potência máxima',v:''},{t:'Recuperar voo reto e horizontal',v:''},
+    ],
+    note:'Alarme de estol ocorre 5–10 kts antes do estol efetivo.'
+  },
+  { title:'Estol – Config. Pouso', sub:'Flape gradativo – mín. 2500 ft AGL',
+    items:[
+      {t:'Altura mínima',v:'2500 ft AGL'},{t:'Estabelecer referência visual',v:''},
+      {t:'Cheque de área (2×90° ou 1×180°)',v:''},{t:'Motor',v:'IDLE'},
+      {t:'Cabrar suavemente (climb zerado)',v:''},{t:'Flape 10° até',v:'70 kts'},
+      {t:'Flape 20° até',v:'65 kts'},{t:'Flape 30° até',v:'60 kts'},
+      {t:'Atitude de pouso',v:''},{t:'No pré-estol: soltar manche + potência máxima',v:''},
+      {t:'Aguardar climb positivo → recolher flape',v:''},{t:'Recuperar voo reto horizontal',v:''},
+    ]
+  },
+],
+
+emergency: [
+  { title:'Pane na Corrida de Decolagem', sub:'Pista suficiente à frente',
+    items:[
+      {t:'1. Throttle',v:'IDLE'},{t:'2. Brakes',v:'APPLY'},{t:'3. Wing Flaps',v:'RETRACT'},
+      {t:'4. Mixture',v:'IDLE CUT-OFF'},{t:'5. Master Switch',v:'OFF'},
+    ]
+  },
+  { title:'Pane Após Decolagem', sub:'Pista insuficiente – vel. segura',
+    items:[
+      {t:'1. Airspeed',v:'60 KIAS'},{t:'2. Mixture',v:'IDLE CUT-OFF'},
+      {t:'3. Fuel Shutoff Valve',v:'OFF'},{t:'4. Ignition Switch',v:'OFF'},
+      {t:'5. Wing Flaps',v:'AS REQUIRED'},{t:'6. Master Switch',v:'OFF'},
+    ],
+    note:'Usar flape conforme circunstância. Preferencialmente full flap.'
+  },
+  { title:'Perda de Potência em Voo', sub:'Se altitude permitir',
+    items:[
+      {t:'1. Airspeed',v:'60 kts'},{t:'2. Campo',v:'ESCOLHER'},{t:'3. Carburetor Heat',v:'ON'},
+      {t:'4. Primer',v:'IN & LOCKED'},{t:'5. Fuel Shutoff Valve',v:'ON'},
+      {t:'6. Mixture',v:'RICH'},{t:'7. Ignition Switch',v:'BOTH (ou START se hélice parou)'},
+    ],
+    note:'Se não reacionar → Pouso sem Potência.'
+  },
+  { title:'Pouso sem Potência', sub:'Reacionamento ineficiente',
+    items:[
+      {t:'1. Airspeed – Flaps UP',v:'65 KIAS'},{t:'   Airspeed – Flaps DOWN',v:'60 KIAS'},
+      {t:'2. Mixture',v:'IDLE CUT-OFF'},{t:'3. Fuel Shutoff Valve',v:'OFF'},
+      {t:'4. Ignition Switch',v:'OFF'},{t:'5. Wing Flaps',v:'30° (recomendado)'},
+      {t:'6. Master Switch',v:'OFF'},{t:'7. Doors',v:'UNLATCH ANTES DO TOQUE'},
+      {t:'8. Seat Belts',v:'AFIVELADOS'},{t:'9. Objetos soltos',v:'REMOVER'},
+      {t:'10. Touchdown',v:'LEVEMENTE CAUDA BAIXA'},{t:'11. Brakes',v:'APPLY HEAVILY'},
+    ],
+    note:'Comunicar ATC se houver tempo. Menor velocidade possível.'
+  },
+  { title:'Pouso Precaução com Motor', sub:'',
+    items:[
+      {t:'1. Airspeed',v:'60 KIAS'},{t:'2. Wing Flaps',v:'20°'},
+      {t:'3. Sobrevoar campo escolhido',v:'INSPECIONAR'},{t:'4. Recolher flapes (alt/vel seguras)',v:''},
+      {t:'5. Radio/Electrical',v:'OFF'},{t:'6. Wing Flaps – Final',v:'30°'},
+      {t:'7. Airspeed – Final',v:'55 KIAS'},{t:'8. Master Switch',v:'OFF'},
+      {t:'9. Doors',v:'UNLATCH ANTES DO TOQUE'},{t:'10. Touchdown',v:'LEVEMENTE CAUDA BAIXA'},
+      {t:'11. Ignition Switch',v:'OFF'},{t:'12. Brakes',v:'APPLY HEAVILY'},
+    ]
+  },
+  { title:'Fogo – Sistema Elétrico', sub:'Fumaça na cabine',
+    items:[
+      {t:'1. Master Switch',v:'OFF'},{t:'2. All Other Switches (exceto ignition)',v:'OFF'},
+      {t:'3. Vents/Cabin Air/Heat',v:'CLOSED'},{t:'4. Extintor',v:'ACTIVATE'},
+    ],
+    warn:'Após extintor com cabine fechada: ventilar IMEDIATAMENTE.'
+  },
+  { title:'Fogo no Motor em Voo', sub:'',
+    items:[
+      {t:'1. Mixture',v:'IDLE CUT-OFF'},{t:'2. Fuel Shutoff Valve',v:'OFF'},
+      {t:'3. Master Switch',v:'OFF'},{t:'4. Cabin Heat and Air',v:'OFF (exceto wing root vents)'},
+      {t:'5. Airspeed',v:'85 KIAS'},{t:'6. Pouso forçado',v:'EXECUTAR'},
+    ],
+    note:'Se fogo não extinguir, aumentar vel. para mistura incombustível.'
+  },
+  { title:'Fogo na Partida (motor não pega)', sub:'Excesso de combustível',
+    items:[
+      {t:'1. Mixture',v:'CUT OFF'},{t:'2. Throttle',v:'FULL OPEN'},{t:'3. Starter',v:'ENGAJADO'},
+    ],
+    note:'Aguardar fogo ser puxado para dentro do motor.'
+  },
+  { title:'Fogo na Partida (motor acionado)', sub:'',
+    items:[
+      {t:'Manter motor ligado até fogo ser puxado',v:''},{t:'1. Throttle',v:'1700 RPM'},
+      {t:'2. Mixture',v:'CUT OFF'},{t:'3. Fuel Selector',v:'OFF'},{t:'4. Extintor',v:'USAR'},
+    ],
+    warn:'Se fogo não se extinguir em segundos: extintores externos.'
+  },
+  { title:'Perda Pressão do Óleo', sub:'',
+    items:[{t:'Pouso de emergência assim que possível',v:''},{t:'Se motor parar → Pouso sem Potência',v:''}]
+  },
+  { title:'Alta Temperatura do Óleo', sub:'',
+    items:[{t:'Pousar assim que possível num aeroporto',v:''},{t:'Monitorar pressão de óleo',v:''}],
+    note:'Causas: baixo nível, obstrução radiador, falha indicador. Rápida elevação = problema grave.'
+  },
+  { title:'Falha no Alternador', sub:'Amperímetro zero',
+    items:[
+      {t:'Confirmar falha (ligar landing light)',v:''},{t:'1. Reduzir carga elétrica',v:''},
+      {t:'2. Checar CB do alternador',v:''},{t:'3. Alternador OFF 1s, então ON',v:''},
+      {t:'Se amp. zero ou CB não reseta → desligar alternador',v:''},{t:'Carga mínima e pousar',v:''},
+    ]
+  },
+  { title:'Motor Engasgando', sub:'Gelo no carburador',
+    items:[
+      {t:'Abrir Carburetor Heat (aguardar melhora)',v:''},{t:'Se sem melhora ~1 min → fechar Carb Heat',v:''},
+      {t:'1. Mistura – correção',v:''},{t:'2. Seletora – trocar tanque',v:''},
+      {t:'3. Instrumentos do motor',v:'CHECAR'},{t:'4. Magnetos – checar L, R, BOTH',v:''},
+    ],
+    note:'Carb Heat: sempre todo ABERTO ou todo FECHADO. Se continuar → pouso técnico.'
+  },
+],
+
+reference: [
+  { title:'Velocidades', sub:'C-152',isRef:true,
+    table:[
+      ['Vel. Máx. Cruzeiro','111 kts'],['Vy (melhor razão subida)','67 kts'],
+      ['Melhor Planeio – Flaps UP','65 kts'],['Melhor Planeio – Flaps DOWN','60 kts'],
+      ['Estol – Flape UP*','43 kts'],['Estol – Flape 30°*','38 kts'],
+      ['Vfe (máx. com flape)','85 kts'],['Va (manobra) 1670/1500/1350','104/98/93 kts'],
+      ['Vne (nunca exceder)','149 kts'],
+    ],note:'*30° inclinação, peso máximo.'
+  },
+  { title:'Pesos', sub:'',isRef:true,
+    table:[
+      ['Peso Vazio','491 kgf (1081 lbs)'],['Peso Máx. Normal','759 kgf (1670 lbs)'],
+      ['Peso Máx. Bagageiro','18 kgf (40 lbs)'],['Teto de Serviço','12.000 ft'],
+      ['Vento Cruzado Máx.','12 kts'],
+    ]
+  },
+  { title:'Motor', sub:'Lycoming O-235-L2C',isRef:true,
+    table:[
+      ['Potência Máxima','110 hp / 2550 RPM'],['Aquecimento/Espera','1000 RPM'],
+      ['Lenta','650–850 RPM'],['Máxima','2550 RPM'],['Cheque Magnetos','1800 RPM'],
+      ['Lubrificante','W-100'],['Óleo','4–6 lts'],
+    ]
+  },
+  { title:'Mínimos Operacionais', sub:'Para decolagem',isRef:true,
+    table:[
+      ['Rotação Mínima Motor','2280 RPM'],['Temp. Mín. Óleo','100° F'],['Vel. Mínima (Vr)','60 kts'],
+    ]
+  },
+  { title:'Pressão/Temp. Óleo', sub:'',isRef:true,
+    table:[
+      ['P. Máxima','115 psi'],['P. Normal','a 90 psi'],
+      ['T. Mínima','75° F'],['T. Máxima','245° F'],['T. Normal','75–245° F'],
+    ]
+  },
+  { title:'Combustível', sub:'AVGAS 100LL',isRef:true,
+    table:[
+      ['Por Tanque','13 US Gal / 49 lts'],['Total','26 US Gal / 98 lts'],
+      ['Aproveitável','24,5 US Gal / 94 lts'],['Mín. Voo Local','13 US Gal'],
+      ['Consumo Horário','5,1 US Gal / 19,3 lts/h'],['Autonomia','04:00 h'],
+      ['Pressão Normal','a 8 psi'],
+    ],note:'*Consumo: 4000 ft, 2300 RPM, ISA.'
+  },
+],
+
+};
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let curPhase = null;
+let curStep = 0;
+let checked = {};
+function ck(p,s,i){ return `${p}-${s}-${i}`; }
+
+// ═══════════════════════════════════════
+// PARAM EXTRACTION
+// ═══════════════════════════════════════
+const UNIT_MAP = {
+  'RPM':  {label:'RPM',     unit:'RPM', cls:'clr-rpm'},
+  'kts':  {label:'VELOCIDADE',unit:'kts', cls:'clr-kts'},
+  'KIAS': {label:'VELOCIDADE',unit:'KIAS',cls:'clr-kts'},
+  'PSI':  {label:'PRESSÃO',  unit:'PSI', cls:'clr-psi'},
+  'ft':   {label:'ALTITUDE', unit:'ft',  cls:'clr-ft'},
+  'ft/min':{label:'RAZÃO',   unit:'ft/min',cls:'clr-ft'},
+};
+
+function extractParams(step) {
+  const params = [];
+  const seen = new Set();
+  if (!step.items) return params;
+  for (const item of step.items) {
+    const val = item.v || '';
+    // Match patterns like "2280 RPM", "≥ 60 PSI", "65 kts", "100° F", "10°", "500 ft/min", "400 ft"
+    const matches = val.matchAll(/([≥≤]?\s*\d+[\-–]?\d*)\s*(RPM|kts|KIAS|PSI|ft\/min|ft|°\s*F)/gi);
+    for (const m of matches) {
+      const rawVal = m[1].trim();
+      let rawUnit = m[2].trim();
+      if (rawUnit === '° F') rawUnit = '°F';
+      let info;
+      if (rawUnit === '°F') {
+        info = {label:'TEMPERATURA',unit:'°F',cls:'clr-temp'};
+      } else if (rawUnit === 'ft/min') {
+        info = UNIT_MAP['ft/min'];
+      } else {
+        info = UNIT_MAP[rawUnit];
+      }
+      if (!info) continue;
+      const key = rawVal + rawUnit;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      params.push({ value: rawVal, unit: info.unit, label: info.label, cls: info.cls });
+    }
+    // Flap degrees
+    const flapMatch = val.match(/(\d+)\s*°(?!\s*F)/);
+    if (flapMatch) {
+      const key = flapMatch[1] + 'flap';
+      if (!seen.has(key)) {
+        seen.add(key);
+        params.push({ value: flapMatch[1]+'°', unit:'FLAP', label:'FLAPE', cls:'clr-flap' });
+      }
+    }
+  }
+  return params;
+}
+
+function paramsPreviewText(step) {
+  const p = extractParams(step);
+  if (!p.length) return '';
+  return p.map(x => x.value + ' ' + x.unit).join(' | ');
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function goHome() {
+  curPhase = null;
+  document.getElementById('home-screen').style.display = 'block';
+  const fl = document.getElementById('flight-screen');
+  const gn = document.getElementById('ground-screen');
+  fl.style.display = 'none';  gn.style.display = 'none';  closeSheet();
+}
+
+function go(phaseId) {
+  curPhase = phaseId;
+  curStep = 0;
+  gndExpanded = null;
+  closeSheet();
+  const meta = PHASE_META[phaseId];
+  document.getElementById('home-screen').style.display = 'none';
+  const fl = document.getElementById('flight-screen');
+  const gn = document.getElementById('ground-screen');
+  fl.style.display = 'none';  gn.style.display = 'none';
+  if (meta.mode === 'flight') {
+    fl.style.display = 'flex';    renderFlight();
+  } else {
+    gn.style.display = 'flex';    renderGround();
+  }
+}
+
+// ═══════════════════════════════════════
+// FLIGHT MODE RENDER
+// ═══════════════════════════════════════
+function renderFlight() {
+  const meta = PHASE_META[curPhase];
+  const steps = PHASES[curPhase];
+  const step = steps[curStep];
+
+  // Top bar
+  const badge = document.getElementById('fl-badge');
+  badge.textContent = meta.badge;
+  badge.style.background = meta.color + '33';
+  badge.style.color = meta.color;
+
+  document.getElementById('fl-step-label').textContent = step.title;
+  document.getElementById('fl-counter').textContent = `Etapa ${curStep+1} de ${steps.length}`;
+
+  // Params
+  const params = extractParams(step);
+  const paramsEl = document.getElementById('fl-params');
+  if (params.length === 0) {
+    paramsEl.innerHTML = '';
+    paramsEl.className = 'fl-params';
+  } else {
+    const cols = params.length <= 2 ? 'cols-2' : 'cols-3';
+    const compact = params.length > 4 ? ' compact' : '';
+    paramsEl.className = `fl-params ${params.length === 1 ? 'cols-1' : cols}${compact}`;
+    paramsEl.innerHTML = params.map(p =>
+      `<div class="param-tile ${p.cls}">
+        <div class="pt-label">${p.label}</div>
+        <div class="pt-row"><span class="pt-value">${p.value}</span><span class="pt-unit">${p.unit}</span></div>
+      </div>`
+    ).join('');
+  }
+
+  // Step items
+  const stepEl = document.getElementById('fl-step');
+  let html = `<div class="fl-step-title">
+    <span class="fl-step-num" style="background:${meta.color}">${curStep+1}</span>
+    <h2>${step.title}${step.sub ? `<span class="fl-sub">${step.sub}</span>` : ''}</h2>
+  </div><div class="fl-items">`;
+
+  (step.items || []).forEach((item, i) => {
+    const isChecked = !!checked[ck(curPhase,curStep,i)];
+    html += `<div class="fl-item${isChecked?' checked':''}" onclick="flCheck(${i})">
+      <span class="fi-box">${isChecked?'✓':''}</span>
+      <span class="fi-text">${item.t}${item.v ? ` <span class="fi-val">${item.v}</span>` : ''}</span>
+    </div>`;
+  });
+  html += '</div>';
+  if (step.note) html += `<div class="fl-note">${step.note}</div>`;
+  if (step.warn) html += `<div class="fl-warn">${step.warn}</div>`;
+  stepEl.innerHTML = html;
+  stepEl.scrollTop = 0;
+
+  // Next preview
+  const nextEl = document.getElementById('fl-next');
+  if (curStep < steps.length - 1) {
+    const ns = steps[curStep + 1];
+    const np = paramsPreviewText(ns);
+    nextEl.className = 'fl-next';
+    nextEl.innerHTML = `<div class="fl-next-label">PRÓXIMO ▸</div>
+      <div class="fl-next-title">${ns.title}</div>
+      ${np ? `<div class="fl-next-params">${np}</div>` : ''}`;
+  } else {
+    nextEl.className = 'fl-next no-next';
+    nextEl.innerHTML = `<div class="fl-next-label">FIM DA FASE</div>
+      <div class="fl-next-title" style="color:var(--text3)">Toque para voltar ao início</div>`;
+    nextEl.onclick = () => goHome();
+  }
+
+  // Nav dots
+  const dotsEl = document.getElementById('fl-dots');
+  dotsEl.innerHTML = steps.map((_,i) => {
+    const allDone = stepAllDone(curPhase, i);
+    return `<div class="fl-dot${i===curStep?' active':''}${allDone?' done':''}" onclick="goStep(${i})"></div>`;
+  }).join('');
+
+  // Prev/Next buttons
+  document.getElementById('fl-prev-btn').classList.toggle('disabled', curStep === 0);
+  document.getElementById('fl-next-btn').classList.toggle('disabled', curStep >= steps.length - 1);
+}
+
+function stepAllDone(p, s) {
+  const items = PHASES[p][s].items;
+  if (!items || !items.length) return false;
+  return items.every((_,i) => !!checked[ck(p,s,i)]);
+}
+
+function flCheck(i) {
+  const key = ck(curPhase, curStep, i);
+  checked[key] = !checked[key];
+  try { navigator.vibrate(10); } catch(e){}
+  renderFlight();
+}
+
+function nextStep() {
+  const steps = PHASES[curPhase];
+  if (curStep < steps.length - 1) {
+    curStep++;
+    try { navigator.vibrate(10); } catch(e){}
+    renderFlight();
+  }
+}
+
+function prevStep() {
+  if (curStep > 0) {
+    curStep--;
+    try { navigator.vibrate(10); } catch(e){}
+    renderFlight();
+  }
+}
+
+function goStep(i) {
+  curStep = i;
+  renderFlight();
+}
+
+// Swipe handling for flight mode
+let touchStartX = 0, touchStartY = 0;
+document.getElementById('flight-screen').addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+document.getElementById('flight-screen').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dx < 0) nextStep();
+    else prevStep();
+  }
+}, { passive: true });
+
+// ═══════════════════════════════════════
+// GROUND MODE RENDER
+// ═══════════════════════════════════════
+let gndExpanded = null;
+
+function renderGround() {
+  const meta = PHASE_META[curPhase];
+  const steps = PHASES[curPhase];
+
+  document.getElementById('gnd-title').textContent = meta.title;
+  const totalItems = steps.reduce((a,s) => a + (s.items?s.items.length:0), 0);
+  const doneItems = steps.reduce((a,s,si) => a + (s.items?s.items.filter((_,ii)=>!!checked[ck(curPhase,si,ii)]).length:0), 0);
+  document.getElementById('gnd-sub').textContent = totalItems ? `${doneItems}/${totalItems} itens` : `${steps.length} itens`;
+  document.getElementById('gnd-prog').style.width = totalItems ? ((doneItems/totalItems)*100)+'%' : '0%';
+
+  const el = document.getElementById('gnd-content');
+  let html = '';
+  steps.forEach((step, si) => {
+    const isActive = gndExpanded === si;
+    const cnt = step.items ? step.items.length : 0;
+    const done = step.items ? step.items.filter((_,ii)=>!!checked[ck(curPhase,si,ii)]).length : 0;
+    const allDone = cnt > 0 && done === cnt;
+
+    html += `<div class="gnd-step${isActive?' active':''}${allDone&&!isActive?' done':''}">
+      <div class="gnd-step-hdr" onclick="gndToggle(${si})">
+        <span class="gnd-snum">${allDone&&!isActive?'✓':(si+1)}</span>
+        <h3>${step.title}${step.sub?` <span style="font-weight:400;font-size:12px;color:var(--text2)">${step.sub}</span>`:''}</h3>
+        <span class="cnt">${cnt?done+'/'+cnt:''}</span>
+      </div>
+      <div class="gnd-step-body">`;
+
+    if (step.isRef && step.table) {
+      html += '<table class="ref-table">';
+      step.table.forEach(r => html += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`);
+      html += '</table>';
+    } else if (step.items) {
+      html += '<ul class="gnd-items">';
+      step.items.forEach((item, ii) => {
+        const c = !!checked[ck(curPhase,si,ii)];
+        html += `<li class="${c?'checked':''}" onclick="gndCheck(${si},${ii})">
+          <span class="gi-box">${c?'✓':''}</span>
+          <span class="gi-text">${item.t}${item.v?` <span class="gi-val">${item.v}</span>`:''}</span>
+        </li>`;
+      });
+      html += '</ul>';
+      if (cnt) html += `<button class="gnd-reset" onclick="gndReset(event,${si})">↺ Reiniciar</button>`;
+    }
+    if (step.note) html += `<div class="gnd-note">${step.note}</div>`;
+    if (step.warn) html += `<div class="gnd-warn">${step.warn}</div>`;
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function gndToggle(si) {
+  gndExpanded = gndExpanded === si ? null : si;
+  renderGround();
+}
+
+function gndCheck(si, ii) {
+  checked[ck(curPhase,si,ii)] = !checked[ck(curPhase,si,ii)];
+  gndExpanded = si;
+  renderGround();
+}
+
+function gndReset(e, si) {
+  e.stopPropagation();
+  PHASES[curPhase][si].items.forEach((_,ii) => delete checked[ck(curPhase,si,ii)]);
+  gndExpanded = si;
+  renderGround();
+}
+
+// ═══════════════════════════════════════
+// BOTTOM SHEET
+// ═══════════════════════════════════════
+function openSheet() {
+  const el = document.getElementById('sheet-list');
+  let html = '';
+  for (const [id, meta] of Object.entries(PHASE_META)) {
+    const isCurrent = id === curPhase;
+    html += `<div class="sheet-item${isCurrent?' current':''}" onclick="go('${id}')">
+      <span class="si-icon">${meta.icon}</span>
+      <div class="si-info"><h3>${meta.title}</h3><p>${PHASES[id].length} etapas</p></div>
+    </div>`;
+  }
+  el.innerHTML = html;
+  const overlay = document.getElementById('sheet-overlay');
+  overlay.style.display = 'block';
+  requestAnimationFrame(() => overlay.classList.add('open'));
+}
+
+function closeSheet() {
+  const overlay = document.getElementById('sheet-overlay');
+  overlay.classList.remove('open');
+  setTimeout(() => overlay.style.display = 'none', 300);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+goHome();
+</script>
+</body>
+</html>
